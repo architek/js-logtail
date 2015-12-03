@@ -1,11 +1,10 @@
 /* Copyright (c) 2012: Daniel Richman. License: GNU GPL 3 */
 /* Additional features: Priyesh Patel                     */
+/* Additional features: Laurent Kislaire                  */
 
 (function () {
 
 var dataelem = "#data";
-var pausetoggle = "#pause";
-var scrollelems = ["html", "body"];
 
 var url = "log";
 var fix_rn = true;
@@ -19,7 +18,7 @@ var reverse = true;
 var log_data = "";
 var log_file_size = 0;
 
-/* :-( https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/parseInt */
+/* :- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/parseInt */
 function parseInt2(value) {
     if(!(/^[0-9]+$/.test(value))) throw "Invalid integer " + value;
     var v = Number(value);
@@ -129,6 +128,7 @@ function get_log() {
 }
 
 function scroll(where) {
+    var scrollelems = ["html", "body"];
     for (var i = 0; i < scrollelems.length; i++) {
         var s = $(scrollelems[i]);
         if (where === -1)
@@ -170,13 +170,39 @@ function error(what) {
     return false;
 }
 
+function getQueryParams(qs) {
+    qs = qs.split('+').join(' ');
+
+    var params = {},
+        tokens,
+        re = /[?&]?([^=]+)=([^&]*)/g;
+
+    while (tokens = re.exec(qs)) {
+        params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
+    }
+
+    return params;
+}
+
 $(document).ready(function () {
     window.onerror = error;
 
-    /* If URL is /logtail/?noreverse display in chronological order */
-    var hash = location.search.replace(/^\?/, "");
-    if (hash == "noreverse")
-        reverse = false;
+    var revtoggle= "#rev";
+    var pausetoggle = "#pause";
+
+    var query = getQueryParams(document.location.search);
+    url  = query.url;
+    var hash = query.load;
+    if (hash > 0)
+        load=1024*hash;
+
+    /* Add reverse toggle */
+    $(revtoggle).click(function (e) {
+        reverse= !reverse;
+        $(revtoggle).text(reverse ? "Chrono" : "Reversed");
+        show_log();
+        e.preventDefault();
+    });
 
     /* Add pause toggle */
     $(pausetoggle).click(function (e) {
