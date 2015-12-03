@@ -20,7 +20,7 @@ On the server side, you'll need to:
  * make sure logrotate config doesn't have any *create* option to keep attributes 
    for the new file as they were for the original log file
 
-Example for nginx
+Example (webserver nginx)
 
     location /js-logtail/ {
         alias /var/www/js-logtail/;
@@ -31,7 +31,7 @@ Example for nginx
        access_log off;
     }
 
-setfacl -m u:www-data:r kern.log
+    setfacl -m u:www-data:r kern.log
 
 
 License is GNU GPL 3; see http://www.gnu.org/licenses/
