@@ -7,12 +7,32 @@ This uses an ajax request, and the HTTP Range: header to request only the last
 ever retrieves new data (no refreshing the whole file, or even the last 30KB).
 Handles file truncation too.
 
-No server side code is required - it's all just static
-files - and all modern web servers support Range (tested lighttpd, cherokee,
-apache). Tested (briefly) in IE, FF, Chrome.
+No server side code is required - it's all just static files
+Should work with all modern web servers and browsers supporting Range (tested nginx with Firefox) 
 
-Usage: symlink the log to /log, or alter the url in logtail.js. Other settings
-available in logtail.js including poll frequency. Then browse to index.html
+Usage:
+http://server/js-logtail?url=/log/syslog&load=300
+will show the last 300KB of syslog
+
+On the server side, you'll need to:
+ * alias /log to /var/log
+ * give read access to the user which runs the webserver
+ * make sure logrotate config doesn't have any *create* option to keep attributes 
+   for the new file as they were for the original log file
+
+Example for nginx
+
+    location /js-logtail/ {
+        alias /var/www/js-logtail/;
+        index index.html;
+    }
+    location /log/ {
+       alias /var/log/;
+       access_log off;
+    }
+
+setfacl -m u:www-data:r kern.log
+
 
 License is GNU GPL 3; see http://www.gnu.org/licenses/
 
