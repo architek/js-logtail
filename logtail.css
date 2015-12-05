@@ -1,14 +1,24 @@
-#rev,#pause
+#rev,#pause,#input,#search
 {
     border-width:2px;
     border-style: solid;
-    text-decoration:none;
     padding:3px;
     margin:2px;
     float:left;
 }
 
-#rev:hover ,#pause:hover{
+#input,#search
+{
+    float:right;
+}
+
+#input
+{
+    width:20em;
+    padding:4px;
+}
+
+#search:hover,#rev:hover,#pause:hover{
        background-color:#C8C8C8;
 }
 

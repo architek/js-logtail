@@ -128,7 +128,8 @@ function get_log() {
 }
 
 function scroll(where) {
-    var scrollelems = ["html", "body"];
+    /*var scrollelems = ["html", "body"];*/
+    var scrollelems = ["html"];
     for (var i = 0; i < scrollelems.length; i++) {
         var s = $(scrollelems[i]);
         if (where === -1)
@@ -153,6 +154,13 @@ function show_log() {
 
     if (fix_rn)
         t = t.replace(/\n/g, "\r\n");
+
+    var p = $(input).val();
+    if ( p != "") {
+        t = t + "\r\n";
+        var re = new RegExp("^.*" + p +".*$\r\n","gm");
+        t = t.replace(re,"");
+    }
 
     $(dataelem).text(t);
     if (!reverse)
@@ -189,12 +197,27 @@ $(document).ready(function () {
 
     var revtoggle= "#rev";
     var pausetoggle = "#pause";
+    var searchbtn = "#search";
+    var searchinput = "#input";
 
     var query = getQueryParams(document.location.search);
     url  = query.url;
     var hash = query.load;
     if (hash > 0)
         load=1024*hash;
+
+    /* Add search btn */
+    $(searchbtn).click(function (e) {
+        show_log();
+        e.preventDefault();
+    });
+
+    $(searchinput).keypress(function (e) {
+        if (e.which == 13) {
+            show_log();
+            return false;
+        }
+    });
 
     /* Add reverse toggle */
     $(revtoggle).click(function (e) {
