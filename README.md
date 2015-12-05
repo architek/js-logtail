@@ -1,6 +1,6 @@
 # javascript logtailer
 
-Ludicrously simple remote unix 'tail' like log viewer.
+Ludicrously simple remote unix 'tail -f' like log viewer.
 
 This uses an ajax request, and the HTTP Range: header to request only the last
 KB of a log file. It then polls for data appended to that file, and only
@@ -17,10 +17,9 @@ http://server/js-logtail?url=/log/syslog&load=300
 
 will show the last 300KB of syslog
 
-The filter can be used to search or filter lines containing a pattern
+The filter can be used to filter out lines containing a pattern
  * *localhost* will filter out lines containing *localhost*
  * *(localhost|ACCEPT)* will filter out lines containing either *localhost* or *ACCEPT*
- * *(!localhost|!ACCEPT)* will only show lines containing either *localhost* or *ACCEPT*
 
 On the server side, you'll need to:
  * alias /log to /var/log
