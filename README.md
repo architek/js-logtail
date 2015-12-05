@@ -3,16 +3,24 @@
 Ludicrously simple remote unix 'tail' like log viewer.
 
 This uses an ajax request, and the HTTP Range: header to request only the last
-~30KB of a log file. It then polls for data appended to that file, and only
-ever retrieves new data (no refreshing the whole file, or even the last 30KB).
+KB of a log file. It then polls for data appended to that file, and only
+ever retrieves new data (no refreshing the whole file, or even the last KB).
 Handles file truncation too.
 
 No server side code is required - it's all just static files
+
 Should work with all modern web servers and browsers supporting Range (tested nginx with Firefox) 
 
 Usage:
+
 http://server/js-logtail?url=/log/syslog&load=300
+
 will show the last 300KB of syslog
+
+The filter can be used to search or filter lines containing a pattern
+ * *localhost* will filter out lines containing *localhost*
+ * *(localhost|ACCEPT)* will filter out lines containing either *localhost* or *ACCEPT*
+ * *(!localhost|!ACCEPT)* will only show lines containing either *localhost* or *ACCEPT*
 
 On the server side, you'll need to:
  * alias /log to /var/log
