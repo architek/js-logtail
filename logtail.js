@@ -17,6 +17,7 @@ var pause = false;
 var reverse = true;
 var log_data = "";
 var log_file_size = 0;
+var timeout;
 
 /* :- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/parseInt */
 function parseInt2(value) {
@@ -106,7 +107,7 @@ function get_log() {
 
             if (added)
                 show_log(added);
-            setTimeout(get_log, poll);
+            timeout = setTimeout(get_log, poll);
         },
         error: function (xhr, s, t) {
             loading = false;
@@ -119,7 +120,7 @@ function get_log() {
                 log_data = "";
                 show_log();
 
-                setTimeout(get_log, poll);
+                timeout = setTimeout(get_log, poll);
             } else {
                 throw "Unknown AJAX Error (status " + xhr.status + ")";
             }
@@ -140,7 +141,6 @@ function scroll(where) {
 }
 
 function show_log() {
-    if (pause) return;
 
     var t = log_data;
 
@@ -156,7 +156,7 @@ function show_log() {
         t = t.replace(/\n/g, "\r\n");
 
     var p = $(input).val();
-    if ( p != "") {
+    if ( p !== "") {
         t = t + "\r\n";
         var re = new RegExp("^.*" + p +".*$\r\n","gm");
         t = t.replace(re,"");
@@ -231,7 +231,12 @@ $(document).ready(function () {
     $(pausetoggle).click(function (e) {
         pause = !pause;
         $(pausetoggle).text(pause ? "Unpause" : "Pause");
-        show_log();
+        if (pause) {
+            clearTimeout(timeout);
+        } else {
+            show_log();
+            timeout = setTimeout(get_log, poll);
+        }
         e.preventDefault();
     });
 
