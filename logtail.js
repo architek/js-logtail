@@ -5,6 +5,9 @@
 (function () {
 
 var dataelem = "#data";
+var revtoggle= "#rev";
+var pausetoggle = "#pause";
+var searchbtn = "#search";
 
 var url = "log";
 var fix_rn = true;
@@ -147,7 +150,7 @@ function show_log() {
     if (reverse) {
         var t_a = t.split(/\n/g);
         t_a.reverse();
-        if (t_a[0] == "") 
+        if (t_a[0] == "")
             t_a.shift();
         t = t_a.join("\n");
     }
@@ -167,11 +170,25 @@ function show_log() {
         scroll(-1);
 }
 
+function set_rev() {
+    $(revtoggle).text(reverse ? "Chrono" : "Reversed" );
+    if (reverse) {
+        $("#header").insertBefore("#data");
+        scroll(0);
+    } else {
+        $("#data").insertBefore("#header");
+    }
+}
+
+function set_pause() {
+    $(pausetoggle).text(pause ? "Unpause" : "Pause");
+}
+
 function error(what) {
     kill = true;
 
     $(dataelem).text("An error occured :-(.\r\n" +
-                     "Reloading may help; no promises.\r\n" + 
+                     "Reloading may help; no promises.\r\n" +
                      what);
     scroll(0);
 
@@ -195,13 +212,11 @@ function getQueryParams(qs) {
 $(document).ready(function () {
     window.onerror = error;
 
-    var revtoggle= "#rev";
-    var pausetoggle = "#pause";
-    var searchbtn = "#search";
     var searchinput = "#input";
 
     var query = getQueryParams(document.location.search);
     url  = query.url;
+    document.title = url.replace( /^(?:.*\/)?(.*)$/ , '$1');
     var hash = query.load;
     if (hash > 0)
         load=1024*hash;
@@ -222,7 +237,7 @@ $(document).ready(function () {
     /* Add reverse toggle */
     $(revtoggle).click(function (e) {
         reverse= !reverse;
-        $(revtoggle).text(reverse ? "Chrono" : "Reversed");
+        set_rev();
         show_log();
         e.preventDefault();
     });
@@ -230,7 +245,7 @@ $(document).ready(function () {
     /* Add pause toggle */
     $(pausetoggle).click(function (e) {
         pause = !pause;
-        $(pausetoggle).text(pause ? "Unpause" : "Pause");
+        set_pause();
         if (pause) {
             clearTimeout(timeout);
         } else {
@@ -240,6 +255,9 @@ $(document).ready(function () {
         e.preventDefault();
     });
 
+    set_rev();
+    set_pause();
+    $(search).text(" Filter");
     get_log();
 });
 
