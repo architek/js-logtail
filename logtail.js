@@ -108,8 +108,10 @@ function get_log() {
                     added = true;
             }
 
-            if (added)
-                show_log(added);
+            if (added) {
+                show_log();
+                if (!first_load) $("#favicon").attr("href","new.png");
+            }
             timeout = setTimeout(get_log, poll);
         },
         error: function (xhr, s, t) {
@@ -125,6 +127,7 @@ function get_log() {
 
                 timeout = setTimeout(get_log, poll);
             } else {
+                $("#favicon").attr("href","err.png");
                 throw "Unknown AJAX Error (status " + xhr.status + ")";
             }
         }
@@ -191,6 +194,7 @@ function error(what) {
                      "Reloading may help; no promises.\r\n" +
                      what);
     scroll(0);
+    $("#favicon").attr("href","err.png");
 
     return false;
 }
@@ -259,6 +263,10 @@ $(document).ready(function () {
     set_pause();
     $(search).text(" Filter");
     get_log();
+});
+
+$(window).focus(function() {
+    $("#favicon").attr("href","");
 });
 
 })();
