@@ -29,7 +29,7 @@ On the server side, you'll need to:
 
 Example (webserver nginx)
 
-    location /js-logtail/ {
+    location /js-logtail {
         alias /var/www/js-logtail/;
         index index.html;
     }
