@@ -7,6 +7,13 @@
     float:left;
 }
 
+#filename
+{
+    padding:3px;
+    margin:2px 2px 2px 100px;
+    float:left
+}
+
 #input,#search
 {
     float:right;

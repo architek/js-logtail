@@ -8,6 +8,7 @@ var dataelem = "#data";
 var revtoggle= "#rev";
 var pausetoggle = "#pause";
 var searchbtn = "#search";
+var filenamediv = "#filename";
 
 var url = "log";
 var fix_rn = true;
@@ -259,9 +260,14 @@ $(document).ready(function () {
         e.preventDefault();
     });
 
+    /* Add logfile name */
+    $(filenamediv).text(url);
+
+    /* Start */
     set_rev();
     set_pause();
     $(search).text(" Filter");
+
     get_log();
 });
 
