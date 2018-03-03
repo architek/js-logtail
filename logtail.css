@@ -1,17 +1,19 @@
-#rev,#pause,#input,#search
+#rev,#pause,#input,#search,#filename
 {
-    border-width:2px;
-    border-style: solid;
     padding:3px;
     margin:2px;
     float:left;
 }
 
+#rev,#pause,#input,#search
+{
+    border-width:2px;
+    border-style: solid;
+}
+
 #filename
 {
-    padding:3px;
-    margin:2px 2px 2px 100px;
-    float:left
+    margin:2px 2px 2px 200px;
 }
 
 #input,#search
