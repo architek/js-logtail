@@ -38,7 +38,8 @@ Example (webserver nginx)
        access_log off;
     }
 
-    setfacl -m u:www-data:r kern.log
+apt install acl
+setfacl -m u:www-data:r kern.log
 
 
 License is GNU GPL 3; see http://www.gnu.org/licenses/
